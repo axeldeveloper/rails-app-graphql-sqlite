@@ -271,6 +271,12 @@ app = "rails-graphql-sqlite"
     hard_limit = 1000
     soft_limit = 100
 
+
+production:
+  <<: *default
+  database: db/production.sqlite3 # Caminho do banco de produção
+  # database: <%= ENV.fetch("DATABASE_URL") %> # Linha comentada, não será lida
+
 ```
 
 # ✅ links uteis
