@@ -188,6 +188,7 @@ GEM
     parser (3.3.7.0)
       ast (~> 2.4.1)
       racc
+    pg (1.5.9)
     psych (5.2.3)
       date
       stringio
@@ -378,6 +379,7 @@ DEPENDENCIES
   graphql
   importmap-rails
   jbuilder
+  pg
   puma
   rack-mini-profiler
   rails (~> 7.1.0)

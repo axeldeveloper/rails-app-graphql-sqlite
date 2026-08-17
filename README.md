@@ -1,28 +1,44 @@
-'# Rails and Graphql
+# ✅ Rails and Graphql
+
+# ✅ Project
+
+- rails
+- sqlite
+- graphql
+- spec
+- ...
 
 ![image](/screem/logo.png)
 
-# Project
+# ✅ ASDF
 
-- rails
-
-- sqlite
-
-- graphql
-
-- ...
-
-# Create project local
 ```sh
+asdf plugin add ruby         # install ruby
+asdf install ruby <version>  # e.g., asdf install ruby 3.2.0
+asdf global ruby <version>   # or asdf local ruby <version>
+```
+
+# ✅ Create project local
+
+```sh
+# install bundler gems
 $ gem install bundler
 
+# create project
+$ rails new graphql_test --database=postgresql
+
+# install gems
 $ bundle install rails
 
-$ rails new graphql_test --database=postgresql
+$ add gem 'graphql'
 
 $ rake db:create
 
-$ add gem 'graphql'
+$ rake db:migrate
+
+$ rake db:seed
+# or
+$ rails db:create db:migrate db:seed
 
 $ bundle install
 
@@ -33,21 +49,13 @@ $ rails generate model Author first_name:string last_name:string date_of_birth:d
 
 $ rails generate model Book title:string author:references publication_date:integer genre:string --no-test-framework
 
-
-
-$ rake db:migrate
-
-$ rake db:seed
-
-or rails db:create db:migrate db:seed
-
+# generate object
 $ rails g graphql:object user
-
-$ rails g graphql:object item
 
 ```
 
-# Run Docker commands
+# ✅ Run docker commands
+
 ```sh
 
 # build
@@ -55,6 +63,10 @@ $ docker compose build
 
 # run project
 $ docker compose up
+
+$ docker compose up --build
+
+$ docker compose run --rm app bin/rails zeitwerk:check
 
 # setud db an migrations
 $ docker compose run --rm app bin/rails db:setup
@@ -65,36 +77,30 @@ $ docker compose run --rm app bin/rails middleware
 # migrate
 $ docker compose run --rm app rails db:migrate RAILS_ENV=development
 
-$ docker compose run --rm app rails generate migration CreateAudits notification:string auditable:references{polymorphic}
-
-docker compose run --rm app bin/rails zeitwerk:check
+$ docker compose run --rm app bin/rails zeitwerk:check
 
 
 # Rails generator
+$ docker compose run --rm app rails generate migration CreateAudits notification:string auditable:references{polymorphic}
+
 $ docker compose run --rm app rails generate controller Api::V1::Author
 
 
 ```
 
+# ✅ Rails app Test
 
+## ✅ Default: Run all spec files (i.e., those matching spec/**/*_spec.rb)
 
-# Rails app Test run in docker
 ```sh
+
+# ⚠️ In docker
+# generate spec
 $ docker compose run --rm app rails generate rspec:install
 
-$ bundle exec rspec spec --tag slow_test  #skip slow tests
-# run test in model
 $ docker compose run --rm app rails generate rspec:model book
 
 $ docker compose run --rm app bundle exec rspec spec/models/author_spec.rb
-```
-
-
-
-# Default: Run all spec files (i.e., those matching spec/**/*_spec.rb)
-```sh
-$ bundle exec rspec
-$ bundle exec rspec spec/models
 
 # or
 
@@ -107,83 +113,127 @@ $ docker compose run --rm app bundle exec rspec spec/models/book_spec.rb
 $ docker compose run --rm app bundle exec rspec spec/models/author_spec.rb
 
 $ docker compose run --rm app bundle exec rspec spec/queries/bool_list_spec.rb
-```
 
 
+# ⚠️ In local
 
-# Run rocop in docker
-```sh
-docker compose run --rm rubocop
+# run test
+$ bundle exec rspec
 
-docker-compose run --rm rubocop --auto-correct
+# run test model
+$ bundle exec rspec spec/models
 
-docker compose run --rm rubocop bundle exec rubocop --auto-correct
+$ bundle exec rspec spec/models/book_spec.rb
 
+$ bundle exec rspec spec/models/author_spec.rb
 
-```
+$ bundle exec rspec spec/queries/bool_list_spec.rb
 
+$ bundle exec rspec spec --tag slow_test  #skip slow tests
 
-# Run a single spec file
-```sh
+$ bundle exec rspec spec/controllers/api/v1/books_controller_spec.rb
 
-sudo bundle exec rspec spec/controllers/api/v1/books_controller_spec.rb
-sudo bundle exec rspec spec/controllers/api/v1/books_controller_spec.rb:62
-sudo bundle exec rspec spec/controllers/api/v1/authos_controller_spec.rb:62
+$ bundle exec rspec spec/controllers/api/v1/authos_controller_spec.rb:62
 
 $ bundle exec rspec spec/controllers/accounts_controller_spec.rb
 
 # Run a single example from a spec file (by line number)
 $ bundle exec rspec spec/controllers/accounts_controller_spec.rb:8
 
-sudo bundle exec rspec spec/controllers/api/v1/books_controller_spec.rb
+$ bundle exec rspec spec/controllers/api/v1/books_controller_spec.rb
 
 # See all options for running specs
 $ bundle exec rspec --help
 
 
-# Custom Rake
 
+
+```
+
+# ✅ Rails generator
+
+```sh
+
+# ⚠️ In docker
+# generate controller api controller
+$ docker compose run --rm app rails generate controller Api::V1::Author
+
+# ⚠️ In local
+# generate controller api controller
+$ rails generate controller Api::V1::Author
+
+```
+
+# Run rocop in docker
+
+```sh
+docker compose run --rm rubocop
+
+docker compose run --rm rubocop --auto-correct
+
+docker compose run --rm rubocop bundle exec rubocop --auto-correct
+
+
+```
+
+# ✅ Custom Rake
+
+```sh
+# ⚠️ In docker
 $ docker compose run --rm app bundle exec rake db:seed:single SEED=author_seed
 
 $ docker compose run --rm app bundle exec rake report:generate
 
+# ⚠️ In local
+$ bundle exec rake db:seed:single SEED=author_seed
+$ bundle exec rake report:generate
+
+
 ```
 
-# Deploy Fly.io
+# ✅ Deploy Fly.io
+
 ```sh
-# login 
+# login
 $ flyctl auth login
 # create app
 $ flyctl apps create
 # publish app
-$  flyctl deploy
+$ flyctl deploy
+# access console
+$ flyctl ssh console
 
-flyctl ssh console
+$ fly status
 
-flyctl logs
+$ flyctl logs
 
-flyctl run "bin/rails db:migrate"
+$ flyctl run "bin/rails db:migrate"
 
-flyctl secrets set DATABASE_URL="postgres://usuario:senha@host:porta/database"
+$ flyctl secrets set DATABASE_URL="postgres://usuario:senha@host:porta/database"
 
+$ flyctl ssh console -C "bin/rails db:seed"
 
-flyctl ssh console -C "bin/rails db:seed"
+$ flyctl ssh console -C "bin/rails db:migrate"
 
-fly status
+$ fly ssh console -a rails-graphql-sqlite
 
-fly volumes create lite_volume_meu_db -r gig -n 1
-fly regions list
-fly ssh console -a rails-graphql-sqlite
+$ fly volume create lite_volume_meu_db -r REGION -n COUNT
 
-fly ssh console -a
+$ fly volumes create lite_volume_meu_db -r gig -n 1
 
-fly logs -a rails-graphql-sqlite
+$ fly regions list
+
+$ fly ssh console -a rails-graphql-sqlite
+
+$ fly ssh console -a
+
+$ fly logs -a rails-graphql-sqlite
 
 Volume vol_v88l6pllg9lkyp7v
 
-fly m destroy vol_v88l6pllg9lkyp7v
+$ fly m destroy vol_v88l6pllg9lkyp7v
 
-fly volumes destroy vol_v88l6pllg9lkyp7v
+$ fly volumes destroy vol_v88l6pllg9lkyp7v
 
 
 flyctl secrets set 
@@ -192,10 +242,7 @@ DATABASE_URL="postgres://avnadmin:AVNS_hQ8vgkhpEJJ6O5h4-r7@pg-mss5g-axelpatton-m
 
 ```
 
-
-
-
-# Arquivo de exemplo fly.toml
+# ✅ Arquivo de exemplo fly.toml
 
 ```toml
 app = "rails-graphql-sqlite"
@@ -228,11 +275,15 @@ app = "rails-graphql-sqlite"
     hard_limit = 1000
     soft_limit = 100
 
+
+production:
+  <<: *default
+  database: db/production.sqlite3 # Caminho do banco de produção
+  # database: <%= ENV.fetch("DATABASE_URL") %> # Linha comentada, não será lida
+
 ```
 
-
-
-# Examples project
+# ✅ links uteis
 
 [Postgres](https://selleo.com/blog/how-to-setup-a-project-with-ruby-on-rails-postresql-and-graphql)
 
@@ -242,9 +293,10 @@ app = "rails-graphql-sqlite"
 
 [Ruby on Rails GraphQL API](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-ruby-on-rails-graphql-api)
 
-# Example
 
-- http://localhost:3000/graphiql
+# ✅ Test GraphQL
+
+- <http://localhost:3000/graphiql>
 
 ```json
 
@@ -299,15 +351,19 @@ mutation {
 
 ```json
   mutation {
-        addNote(input: {
-          params: { title: "GraphQL notes", body: "A long body of text about GraphQL" }})
-          {
-            note {
-              id
-              title
-              body
-            }
-          }
+    addNote(input: {
+      params: {
+        title: "GraphQL notes",
+        body: "A long body of text about GraphQL"
+      }
+    })
+    {
+    note {
+        id
+        title
+        body
+      }
+    }
 }
 ```
 
@@ -321,33 +377,32 @@ mutation {
 }
 ```
 
-## Development
+# ✅ Development
 
-    Axel Alexander
+## ✅ Axel Alexander
 
-## My web site
+## ✅ My web site
 
 - [my homepage](https://axeldeveloper.github.io/)
 
 ![image](/screem/rails_ok.png)
 
-## Contributing
+## ✅ Contributing
 
 - Axel
 - anomimous
 
-## Versioning
+## ✅ Versioning
 
-## Authors
+## ✅ Authors
 
-- **Axel Alexander ** - _web site_ - [contact and contracts](http://axel-dev.herokuapp.com/)
+- **Axel Alexander** - _web site_ - [contact and contracts](http://axel-dev.herokuapp.com/)
 
   | Front | HTML | CSS    | VueJS | React | React |
   | ----- | ---- | ------ | ----- | ----- | ----- |
   | Back  | c#   | python | rails | go    | php   |
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
-## License
+# ✅ License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

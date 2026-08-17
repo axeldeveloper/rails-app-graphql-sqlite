@@ -28,9 +28,9 @@ console_command = '/rails/bin/rails console'
   # guest_path = '/rails/public'
   # url_prefix = '/'
 
-[mounts]
-  source = "lite_volume_meu_db"
-  destination = "/mnt/volume"
+#[mounts]
+#  source = "lite_volume_meu_db"
+#  destination = "/mnt/volume"
 
 [[vm]]
   memory = '1gb'
@@ -41,7 +41,6 @@ console_command = '/rails/bin/rails console'
 [deploy]
   #release_command = "bin/rails db:prepare"
   release_command = "bin/rails db:migrate"
-
   # release_command = "bundle exec rails db:migrate"
   # release_command = "bundle exec rails db:migrate && echo 'Migrações executadas com sucesso' || echo 'Falha ao executar migrações'"
 
