@@ -186,6 +186,10 @@ fly m destroy vol_v88l6pllg9lkyp7v
 fly volumes destroy vol_v88l6pllg9lkyp7v
 
 
+flyctl secrets set 
+
+DATABASE_URL="postgres://avnadmin:AVNS_hQ8vgkhpEJJ6O5h4-r7@pg-mss5g-axelpatton-mss.i.aivencloud.com:17489/defaultdb?sslmode=require"
+
 ```
 
 
