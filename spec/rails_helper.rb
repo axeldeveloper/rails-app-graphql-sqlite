@@ -43,18 +43,14 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  # config.fixture_path = "#{Rails.root.join('spec/fixtures')}"
-  config.fixture_path = Rails.root.join('spec/fixtures').to_s
-
+  config.fixture_paths = [Rails.root.join('spec/fixtures').to_s]
   config.use_transactional_fixtures = false
   config.include FactoryBot::Syntax::Methods
   # config.include Devise::Test::ControllerHelpers, type: :controller
   config.infer_spec_type_from_file_location!
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
-  # arbitrary gems may also be filtered via:
-  # config.filter_gems_from_backtrace("gem name")
+
 end
 
 SimpleCov.start 'rails' do

@@ -10,6 +10,18 @@ Bundler.require(*Rails.groups)
 
 module GraphqlTest
   class Application < Rails::Application
+    # Carrega todos os log
+    # Rails.autoloaders.log!
+
+    Rails.autoloaders.each do |autoloader|
+      autoloader.logger =  nil
+
+      # autoloader.logger = Rails.logger
+      # custom_logger = Logger.new(STDOUT)
+      # custom_logger.level = Logger::DEBUG
+      # autoloader.logger = custom_logger
+    end
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
     config.active_record.verify_foreign_keys_for_fixtures = false
@@ -20,21 +32,12 @@ module GraphqlTest
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
-
-    # Only loads a smaller set of middleware suitable for API only apps.
-    # Middleware like session, flash, cookies can be added back manually.
-    # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.active_record.schema_format = :ruby
     config.active_job.queue_adapter = :sidekiq
     config.assets.initialize_on_precompile = true
+
+    # Using Session Middlewares
 
     # This also configures session_options for use below
     # config.session_store :cookie_store, key: '_app_ror_lite_session'

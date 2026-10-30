@@ -1,20 +1,29 @@
-development:
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  #host: seu_hostname
+  #port: 17489
+  #database: seu_banco_de_dados
+  #username: seu_usuario
+  #password: sua_senha
+
+defaultlite: &defaultlite
   adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 5
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
+development:
+  <<: *defaultlite
+  database: db/development.sqlite3
+
+
 test:
-  adapter: sqlite3
+  <<: *defaultlite
   database: db/test.sqlite3
-  pool: 5
-  timeout: 5000
 
 production:
-  adapter: sqlite3
+  <<: *default
   database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+  # database: <%= ENV.fetch("DATABASE_URL") %>
+  # database: /mnt/volume/production.sqlite3 # Ajuste o caminho para o destino do volume

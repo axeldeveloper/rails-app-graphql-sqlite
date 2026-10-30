@@ -1,0 +1,50 @@
+# fly.toml app configuration file generated for rails-graphql-sqlite on 2025-01-27T20:55:25Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'rails-graphql-sqlite'
+primary_region = 'gig'
+console_command = '/rails/bin/rails console'
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[env]
+  RAILS_ENV = 'production'
+  NODE_ENV = 'production'
+  # DATABASE_URL = "sqlite3://db/production.sqlite3"
+  # DATABASE_URL = 'sqlite3:///mnt/name/production.sqlite3'
+  DATABASE_URL="postgres://avnadmin:AVNS_hQ8vgkhpEJJ6O5h4-r7@pg-mss5g-axelpatton-mss.i.aivencloud.com:17489/defaultdb?sslmode=require"
+
+#[[statics]]
+  # guest_path = '/rails/public'
+  # url_prefix = '/'
+
+#[mounts]
+#  source = "lite_volume_meu_db"
+#  destination = "/mnt/volume"
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024
+
+[deploy]
+  #release_command = "bin/rails db:prepare"
+  release_command = "bin/rails db:migrate"
+  # release_command = "bundle exec rails db:migrate"
+  # release_command = "bundle exec rails db:migrate && echo 'Migrações executadas com sucesso' || echo 'Falha ao executar migrações'"
+
+
+#[processes]
+#  web = "bundle exec puma -C config/puma.rb"
+#  # worker = "bundle exec sidekiq"

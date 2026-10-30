@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # # app/controllers/users_controller.rb
-# class UsersController < ApplicationController
+class UsersController < ApplicationController
 #     def index
 #       @inactive_users = UsersListQuery.inactive
 #       @active_users = UsersListQuery.active
@@ -58,4 +58,4 @@
 #     def user_params
 #       params.require(:user).permit(:name, :email, :password, :sign_in_count, :verified)
 #     end
-#   end
+end

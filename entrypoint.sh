@@ -1,15 +1,15 @@
 #!/bin/bash
-set -e 
+set -e
 
-echo "Instalando dependencias do nodejs para front."
-yarn install
+# echo "Instalando dependencias do nodejs para front."
+# yarn install
 
 # Adicione esta linha para instalar o Rubocop no contêiner
 echo "Instalar o Rubocop no contêiner"
-gem install rubocop rubocop-rails
+#gem install rubocop rubocop-rails
 
 
-rm -f /myapp/tmp/pids/server.pid
+#rm -f /myapp/tmp/pids/server.pid
 
 # Verifica se há migrações pendentes e as executa
 echo "Verificando e aplicando migrações pendentes..."
@@ -25,4 +25,4 @@ fi
 
 
 # RUN MAIN PROCESS
-exec "$@"   
+exec "$@"

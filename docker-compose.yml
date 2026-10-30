@@ -29,13 +29,14 @@ services:
     container_name: ror_app
     environment:
       - TZ=America/Sao_Paulo
+      - RAILS_ENV=development
+    env_file: .env
     volumes:
       - .:/myapp
     tmpfs: /app/tmp
     depends_on:
       - db
       - redis
-    env_file: .env
     tty: true
     stdin_open: true
     ports:
@@ -64,29 +65,6 @@ services:
   #   command: bundle exec rubocop --autocorrect
   #   volumes:
   #     - .:/myapp
-
-
-  # webserver:
-  #   tty: true
-  #   stdin_open: true
-  #   build: .
-  #   command: ./run
-  #   ports:
-  #     - "3001:3000"
-  #   links:
-  #     - webpack
-  #   environment:
-  #     - RAILS_ENV=development
-
-  # webpack:
-  #   build: .
-  #   command: bin/webpack-dev-server
-  #   ports:
-  #     - "8080:8080"
-  #     - "35729:35729"
-  #   environment:
-  #     - NODE_ENV=development
-
 
 volumes:
   redis_data:
