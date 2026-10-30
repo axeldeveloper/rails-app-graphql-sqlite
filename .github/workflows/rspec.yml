@@ -1,0 +1,23 @@
+name: RSpec
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  books-request-spec:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: sqlite3:db/test.sqlite3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Run books request specs
+        run: bundle exec rspec spec/requests/api/v1/books_spec.rb
