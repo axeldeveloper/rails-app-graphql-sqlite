@@ -18,6 +18,7 @@ gem 'jbuilder'
 # gem 'psych', '< 4'
 gem 'bootsnap', require: false
 gem 'importmap-rails'
+gem 'pg'
 gem 'puma'
 gem 'redis'
 gem 'sassc-rails'

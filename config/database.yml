@@ -2,11 +2,6 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  #host: seu_hostname
-  #port: 17489
-  #database: seu_banco_de_dados
-  #username: seu_usuario
-  #password: sua_senha
 
 defaultlite: &defaultlite
   adapter: sqlite3
@@ -24,6 +19,3 @@ test:
 
 production:
   <<: *default
-  database: db/production.sqlite3
-  # database: <%= ENV.fetch("DATABASE_URL") %>
-  # database: /mnt/volume/production.sqlite3 # Ajuste o caminho para o destino do volume
