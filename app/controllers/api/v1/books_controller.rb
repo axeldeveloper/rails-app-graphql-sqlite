@@ -34,9 +34,9 @@ module Api
           # if params[:status].presents
           ::Books::BookByGenreQuery.new(genre: params[:genre]).call.to_a
         end
-        puts '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-        puts @books
-        puts '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+        Rails.logger.debug '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+        Rails.logger.debug @books
+        Rails.logger.debug '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
 
         render 'api/v1/books/index', status: :ok
       end

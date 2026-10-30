@@ -1,2 +1,8 @@
-module Api::V1::AuthorsHelper
+# frozen_string_literal: true
+
+module Api
+  module V1
+    module AuthorsHelper
+    end
+  end
 end

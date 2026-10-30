@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Repository responsible for handling Author data persistence and queries
 class BooksRepository
   class << self

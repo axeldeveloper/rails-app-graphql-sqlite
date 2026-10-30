@@ -107,15 +107,16 @@ $ docker compose run --rm app bundle exec rspec spec/queries/bool_list_spec.rb
 
 
 
-# Run rocop in docker
+# Run RuboCop
 ```sh
-docker compose run --rm rubocop 
+bundle exec rubocop
+bundle exec rubocop app/controllers
+bundle exec rubocop -a
+```
 
-docker-compose run --rm rubocop --auto-correct
-
-docker compose run --rm rubocop bundle exec rubocop --auto-correct
-
-
+For Docker:
+```sh
+docker compose run --rm --no-deps app bundle exec rubocop
 ```
 
 # Custom Rake

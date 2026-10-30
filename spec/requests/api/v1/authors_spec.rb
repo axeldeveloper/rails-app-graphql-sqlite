@@ -11,7 +11,7 @@ RSpec.describe 'Api::V1::Authors', type: :request do
       get '/api/v1/authors'
 
       expect(response).to have_http_status(:success)
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
 
       expect(json_response.length).to eq(1)
       expect(json_response.first['first_name']).to eq('João')

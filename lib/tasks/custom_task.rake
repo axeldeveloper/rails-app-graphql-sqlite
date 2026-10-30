@@ -7,7 +7,7 @@ namespace :report do
 
     one_week_ago = 1.week.ago
 
-    authors = Author.where('date_of_birth <= ?', one_week_ago)
+    authors = Author.where(date_of_birth: ..one_week_ago)
 
     authors.each do |user|
       puts "Name: #{user.first_name}, Email: #{user.last_name}, Last Login: #{user.date_of_birth}"

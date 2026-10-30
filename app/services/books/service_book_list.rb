@@ -3,7 +3,7 @@
 # Exemplo de uso:
 #
 #   Books::ServiceBookList.call
-#   
+#
 #
 module Books
   class ServiceBookList < ApplicationService

@@ -3,7 +3,7 @@
 class Book < ApplicationRecord
   ALL_GENRES = %w[Thriller Horror Mystery Comedy Action Adventure Police Drama Suspension].freeze
 
-  enum genre: ALL_GENRES.zip(ALL_GENRES).to_h
+  enum :genre, ALL_GENRES.zip(ALL_GENRES).to_h
 
   validates :title, presence: true
   validates :publication_date, presence: true
@@ -19,7 +19,7 @@ class Book < ApplicationRecord
 
   scope :top, ->(limit) { limit(limit) }
 
-  scope :recent_books, ->(since_when) { where('created_at >= ?', since_when) }
+  scope :recent_books, ->(since_when) { where(created_at: since_when..) }
 
   def self.ordered
     order('publication_date')

@@ -2,11 +2,11 @@
 
 class ApplicationService
   # DRY(Don't Repeat Yourself)
-  def self.call(*ags, &block)
-    #Rails.log '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
-    #Rails.log "DRY(Don't Repeat Yourself)"
-    #Rails.log block
+  def self.call(*ags, &)
+    # Rails.log '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+    # Rails.log "DRY(Don't Repeat Yourself)"
+    # Rails.log block
 
-    new(*ags, &block).call
+    new(*ags, &).call
   end
 end

@@ -1,8 +1,17 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # teste de criação de livro
 RSpec.describe Api::V1::BooksController, type: :controller do
   render_views
+
+  let(:author) do
+    create(:author, first_name: 'João', last_name: 'Silva', date_of_birth: '1990-01-01')
+  end
+  let(:book) do
+    create(:book, title: 'Livro Original', publication_date: 2023, genre: 'Drama', author: author)
+  end
 
   describe 'GET #index' do
     let(:author) { create(:author) }
@@ -27,10 +36,6 @@ RSpec.describe Api::V1::BooksController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:author) { Author.create!(first_name: 'João', last_name: 'Silva', date_of_birth: '1990-01-01') }
-    let(:book) do
-      Book.create!(title: 'Livro Original', publication_date: '2023-01-01', genre: 'Drama', author_id: author.id)
-    end
     context 'quando book existe' do
       it 'retorna o livro com sucesso' do
         get :show, params: { id: book.id }
@@ -57,8 +62,6 @@ RSpec.describe Api::V1::BooksController, type: :controller do
   end
 
   describe 'POST #create' do
-    # Criar um author antes dos testes
-    let(:author) { Author.create!(first_name: 'João', last_name: 'Silva', date_of_birth: '1990-01-01') }
     context 'quando parâmetros obrigatórios estão faltando' do
       it 'retorna erro quando book não está presente' do
         post :create, params: {}
@@ -67,7 +70,7 @@ RSpec.describe Api::V1::BooksController, type: :controller do
           'success' => false,
           'error' => include('param is missing or the value is empty: book')
         }
-        expect(JSON.parse(response.body)).to match(data)
+        expect(response.parsed_body).to match(data)
       end
 
       it 'retorna erro quando book está vazio' do
@@ -78,7 +81,7 @@ RSpec.describe Api::V1::BooksController, type: :controller do
           'success' => false,
           'error' => include('param is missing or the value is empty: book')
         }
-        expect(JSON.parse(response.body)).to match(data)
+        expect(response.parsed_body).to match(data)
       end
     end
 
@@ -125,17 +128,12 @@ RSpec.describe Api::V1::BooksController, type: :controller do
           ]
         }
 
-        expect(JSON.parse(response.body)).to match(data)
+        expect(response.parsed_body).to match(data)
       end
     end
   end
 
   describe 'PUT #update' do
-    let(:author) { Author.create!(first_name: 'João', last_name: 'Silva', date_of_birth: '1990-01-01') }
-    let(:book) do
-      Book.create!(title: 'Livro Original', publication_date: '2023-01-01', genre: 'Drama', author_id: author.id)
-    end
-
     context 'quando os parâmetros são válidos' do
       let(:valid_params) do
         {
@@ -181,11 +179,6 @@ RSpec.describe Api::V1::BooksController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:author) { Author.create!(first_name: 'João', last_name: 'Silva', date_of_birth: '1990-01-01') }
-    let(:book) do
-      Book.create!(title: 'Livro Original', publication_date: '2023-01-01', genre: 'Drama', author_id: author.id)
-    end
-
     it 'deleta o livro com sucesso' do
       delete :destroy, params: { id: book.id }
       expect(response).to have_http_status(:no_content)

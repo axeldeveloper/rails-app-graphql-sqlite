@@ -2,7 +2,6 @@
 
 # config/initializers/book_event_subscriber.rb
 
-
 ActiveSupport::Notifications.subscribe('book.created') do |_name, _start, _finish, _id, payload|
   # Aqui você pode adicionar lógica adicional, como enviar e-mails
   book = payload[:book]
@@ -13,8 +12,6 @@ ActiveSupport::Notifications.subscribe('book.created') do |_name, _start, _finis
   AuditWorker.perform_async(book.id, message)
   StartCronWorker.perform_async
 end
-
-
 
 ActiveSupport::Notifications.subscribe('book.update') do |_name, _start, _finish, _id, payload|
   # Audit.create_audit_for(payload[:book], "Book update with ID: => #{payload[:book].id}")
@@ -27,5 +24,4 @@ ActiveSupport::Notifications.subscribe('book.update') do |_name, _start, _finish
 
   # Enfileira o job para ser executado 10 segundos após a criação do livro
   DelayedJobWorker.perform_in(20.seconds, book.id)
-  
 end

@@ -11,11 +11,11 @@ class DelayedJobWorker
   def perform(book_id)
     # book = Book.find_by(id: book_id)
     # book = ::Books::BookListQuery.find_by_id(book_id)
-    book =  BooksRepository.find_by_id(book_id)
+    book = BooksRepository.find_by(id: book_id)
     if book
       # Invocar a API para obter o status do livro
       response = fetch_book_status(book_id)
-      puts response
+      Rails.logger.debug response
 
       # Verificar se o status é diferente de "pending"
       if response['status'] == 'pending'
@@ -29,8 +29,8 @@ class DelayedJobWorker
     end
   end
 
-  private 
-  
+  private
+
   def fetch_book_status(book_id)
     # Substitua esta URL pela URL da sua API
     url = URI("http://localhost:3000/api/v1/books/#{book_id}")

@@ -16,24 +16,23 @@ gem 'faker'
 gem 'graphql'
 gem 'jbuilder'
 # gem 'psych', '< 4'
+gem 'bootsnap', require: false
 gem 'importmap-rails'
 gem 'puma'
 gem 'redis'
-gem 'stimulus-rails'
-gem 'turbo-rails'
+gem 'sassc-rails'
 gem 'sidekiq', '~> 7.3'
 gem 'sidekiq-cron'
+gem 'sprockets-rails' # Opção 1 (mais comum)
 gem 'sqlite3', '~> 1.4'
-gem 'bootsnap', require: false
-gem "sprockets-rails"  # Opção 1 (mais comum)
-gem "sassc-rails"
-
+gem 'stimulus-rails'
+gem 'turbo-rails'
 
 group :development do
   gem 'web-console'
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  gem 'rack-mini-profiler', require: false
   gem 'graphiql-rails'
+  gem 'rack-mini-profiler', require: false
   gem 'spring'
   gem 'spring-watcher-listen'
 end
@@ -47,6 +46,7 @@ group :development, :test do
   # robocop
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
+  gem 'ruby-lsp-rspec', require: false
 end
 
 group :test do

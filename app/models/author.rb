@@ -16,7 +16,9 @@ class Author < ApplicationRecord
 
   after_update :notify_update
 
-  private def notify_update
+  private
+
+  def notify_update
     ActiveSupport::Notifications.instrument('author.update', book: self)
   end
 end

@@ -6,13 +6,16 @@ Style/FrozenStringLiteralComment:
 
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 3.2
   Exclude:
     - 'db/schema.rb'
-    #- 'bin/bundle'
-    #- 'bin/rails'
-    #- 'bin/rake'
     - 'db/migrate/**/*'
     - 'bin/**/*'
+    - 'log/**/*'
+    - 'node_modules/**/*'
+    - 'storage/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
 
-#Rails:
-#  Enabled: true
+Layout/LineLength:
+  Max: 120

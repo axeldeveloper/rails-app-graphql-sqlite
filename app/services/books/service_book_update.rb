@@ -26,7 +26,7 @@ module Books
       end
     end
 
-    def notify_user_creation(book)
+    def notify_user_creation(_book)
       Rails.logger.warn 'ActiveSupport::Notifications está disponível nesta versão do Rails'
       # ActiveSupport::Notifications.instrument('book.update', book: book)
     end

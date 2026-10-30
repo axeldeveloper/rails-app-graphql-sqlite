@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   module ExceptionHandler
     extend ActiveSupport::Concern
@@ -14,17 +16,17 @@ module Api
         render_error('Recurso não encontrado', :not_found)
       end
 
-      def parameter_missing(e)
+      def parameter_missing(exception)
         Rails.logger.warn 'ExceptionHandler está com erro no parametro missing'
-        Rails.logger.warn e.message
-        render_error(e.message, :bad_request)
+        Rails.logger.warn exception.message
+        render_error(exception.message, :bad_request)
       end
 
-      def record_invalid(e)
-        render_error(e.record.errors.full_messages, :unprocessable_entity)
+      def record_invalid(exception)
+        render_error(exception.record.errors.full_messages, :unprocessable_entity)
       end
 
-      def internal_server_error(e)
+      def internal_server_error(_exception)
         render_error('Erro interno do servidor 45', :internal_server_error)
       end
 
