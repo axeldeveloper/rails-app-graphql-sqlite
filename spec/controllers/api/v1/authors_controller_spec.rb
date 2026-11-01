@@ -47,6 +47,10 @@ RSpec.describe Api::V1::AuthorsController, type: :controller do
   end
 
   describe 'POST #create' do
+    before do
+      request.headers['Authorization'] = "Bearer #{Authentication::AccessToken.issue(create(:user))}"
+    end
+
     context 'com parâmetros válidos' do
       let(:valid_params) do
         {
@@ -91,6 +95,10 @@ RSpec.describe Api::V1::AuthorsController, type: :controller do
   end
 
   describe 'PUT #update' do
+    before do
+      request.headers['Authorization'] = "Bearer #{Authentication::AccessToken.issue(create(:user))}"
+    end
+
     let(:author) { create(:author) }
 
     context 'com parâmetros válidos' do
@@ -145,6 +153,10 @@ RSpec.describe Api::V1::AuthorsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    before do
+      request.headers['Authorization'] = "Bearer #{Authentication::AccessToken.issue(create(:user))}"
+    end
+
     let!(:author) { create(:author) }
 
     context 'quando autor existe' do

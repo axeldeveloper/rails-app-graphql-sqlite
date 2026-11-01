@@ -62,6 +62,10 @@ RSpec.describe Api::V1::BooksController, type: :controller do
   end
 
   describe 'POST #create' do
+    before do
+      request.headers['Authorization'] = "Bearer #{Authentication::AccessToken.issue(create(:user))}"
+    end
+
     context 'quando parâmetros obrigatórios estão faltando' do
       it 'retorna erro quando book não está presente' do
         post :create, params: {}
@@ -134,6 +138,10 @@ RSpec.describe Api::V1::BooksController, type: :controller do
   end
 
   describe 'PUT #update' do
+    before do
+      request.headers['Authorization'] = "Bearer #{Authentication::AccessToken.issue(create(:user))}"
+    end
+
     context 'quando os parâmetros são válidos' do
       let(:valid_params) do
         {
@@ -179,6 +187,10 @@ RSpec.describe Api::V1::BooksController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    before do
+      request.headers['Authorization'] = "Bearer #{Authentication::AccessToken.issue(create(:user))}"
+    end
+
     it 'deleta o livro com sucesso' do
       delete :destroy, params: { id: book.id }
       expect(response).to have_http_status(:no_content)

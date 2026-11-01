@@ -10,6 +10,29 @@
 
 ![image](/screem/logo.png)
 
+## API Authentication
+
+The API keeps book and author reads public. Account registration, login, and
+authenticated writes use these endpoints:
+
+- `POST /api/v1/auth/register` with `{"email":"person@example.com","password":"at-least-12-characters"}`
+- `POST /api/v1/auth/login` with the same email/password fields
+- `POST /api/v1/auth/refresh` to rotate the refresh token
+- `POST /api/v1/auth/logout` to revoke the refresh-token family
+
+Registration and login return an access token in the JSON response. Send it as
+`Authorization: Bearer <access-token>` for REST writes and GraphQL mutations.
+Access tokens expire after 15 minutes.
+
+The refresh token is only sent as an HttpOnly, SameSite=Lax cookie scoped to
+`/api/v1/auth`; clients must preserve cookies between requests. Refresh and
+logout requests must include the exact same-site `Origin` configured by
+`AUTH_ALLOWED_ORIGIN`. Production requires both `AUTH_ALLOWED_ORIGIN` and a
+dedicated `JWT_SECRET_KEY` of at least 32 characters. For Fly.io, set the
+signing secret with `fly secrets set JWT_SECRET_KEY="$(bin/rails secret)"`.
+The Fly configuration uses `https://rails-graphql-sqlite.fly.dev` as its
+allowed origin; update it if the deployment uses a different public origin.
+
 # ✅ ASDF
 
 ```sh

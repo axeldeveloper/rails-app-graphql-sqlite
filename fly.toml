@@ -20,6 +20,7 @@ console_command = '/rails/bin/rails console'
 [env]
   RAILS_ENV = 'production'
   NODE_ENV = 'production'
+  AUTH_ALLOWED_ORIGIN = 'https://rails-graphql-sqlite.fly.dev'
   # DATABASE_URL = "sqlite3://db/production.sqlite3"
   # DATABASE_URL = 'sqlite3:///mnt/name/production.sqlite3'
   DATABASE_URL="postgres://avnadmin:AVNS_hQ8vgkhpEJJ6O5h4-r7@pg-mss5g-axelpatton-mss.i.aivencloud.com:17489/defaultdb?sslmode=require"

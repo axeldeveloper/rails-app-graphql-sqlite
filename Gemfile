@@ -12,8 +12,10 @@ gem 'rails', '~> 7.1.0'
 
 # Use sqlite3 as the database for Active Record
 
+gem 'bcrypt'
 gem 'faker'
 gem 'graphql'
+gem 'jwt'
 gem 'jbuilder'
 # gem 'psych', '< 4'
 gem 'bootsnap', require: false

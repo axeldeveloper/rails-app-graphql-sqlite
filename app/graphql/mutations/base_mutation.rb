@@ -10,7 +10,14 @@
 # end
 
 module Mutations
+  # Requires an authenticated account before resolving any GraphQL mutation.
   class BaseMutation < GraphQL::Schema::Mutation
     null false
+
+    def ready?(**_arguments)
+      raise GraphQL::ExecutionError, 'Authentication required' unless context[:current_user]
+
+      true
+    end
   end
 end
