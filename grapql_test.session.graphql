@@ -1,0 +1,108 @@
+# Execute each named query separately against POST /graphql.
+
+query ListAuthors {
+  authors {
+    id
+    firstName
+    lastName
+    dateOfBirth
+  }
+}
+
+query FindAuthor($id: ID!) {
+  author(id: $id) {
+    id
+    firstName
+    lastName
+    dateOfBirth
+  }
+}
+
+query FindAuthorWithBooks($id: ID!) {
+  author(id: $id) {
+    id
+    firstName
+    lastName
+    books {
+      id
+      title
+      genre
+      publicationDate
+    }
+  }
+}
+
+query ListBooks {
+  books {
+    id
+    title
+    genre
+    publicationDate
+    author {
+      id
+      firstName
+      lastName
+    }
+  }
+}
+
+query FindBook($id: ID!) {
+  book(id: $id) {
+    id
+    title
+    genre
+    publicationDate
+    author {
+      id
+      firstName
+      lastName
+      dateOfBirth
+    }
+  }
+}
+
+mutation CreateAuthor {
+  createAuthor(
+    firstName: "Ada"
+    lastName: "Lovelace"
+    dateOfBirth: "1815-12-10"
+  ) {
+    author {
+      id
+      firstName
+      lastName
+      dateOfBirth
+    }
+    errors
+  }
+}
+
+mutation CreateBook {
+  createBook(
+    title: "The Analytical Engine"
+    authorId: 1
+    publicationDate: 2026
+    genre: Mystery
+  ) {
+    id
+    title
+    genre
+    publicationDate
+  }
+}
+
+mutation UpdateBook($id: Int!, $title: String, $genre: Genre) {
+  updateBook(id: $id, title: $title, genre: $genre) {
+    id
+    title
+    genre
+    publicationDate
+  }
+}
+
+mutation DeleteBook($id: Int!) {
+  destroyBook(id: $id) {
+    id
+    title
+  }
+}

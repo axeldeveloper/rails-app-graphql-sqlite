@@ -7,9 +7,9 @@ Rails.application.routes.draw do
 
   mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql' if Rails.env.development?
 
-  #if Rails.env.production?
+  # if Rails.env.production?
   #  mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
-  #end
+  # end
 
   post '/graphql', to: 'graphql#execute'
 
@@ -19,9 +19,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      
       get 'configs', to: 'configs#index'
-      
+
       resources :books do
         collection do
           get '/genre/:genre(/:status)', to: 'books#categories', as: 'filter'
