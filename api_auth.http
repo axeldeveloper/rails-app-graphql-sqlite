@@ -1,0 +1,252 @@
+@baseUrl = http://localhost:3000
+@email = auth.teste@example.com
+@password = Demoax#12345
+@origin = http://localhost:3000
+@accessToken = {{login.response.body.$.access_token}}
+@authorId = {{createAuthorRest.response.body.$.id}}
+
+# Execute registration once with an email not already in the database.
+# REST Client keeps the HttpOnly refresh cookie and sends it to auth endpoints.
+
+###
+# Cadastro: esperado 201, access_token no JSON e refresh_token em cookie HttpOnly.
+# @name register
+POST {{baseUrl}}/api/v1/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+# Cadastro duplicado: esperado 422; o email nao diferencia maiusculas/minusculas.
+POST {{baseUrl}}/api/v1/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+# Cadastro invalido: senha menor que 12 caracteres; esperado 422.
+POST {{baseUrl}}/api/v1/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "senha.curta@example.com",
+  "password": "curta"
+}
+
+###
+# Cadastro invalido: email malformado; esperado 422.
+POST {{baseUrl}}/api/v1/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "email-invalido",
+  "password": "{{password}}"
+}
+
+###
+# Login valido: esperado 200 e novo refresh cookie.
+# @name login
+POST {{baseUrl}}/api/v1/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+# Login com senha incorreta: esperado 401 com erro generico.
+POST {{baseUrl}}/api/v1/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "senha-incorreta"
+}
+
+###
+# Login com usuario inexistente: esperado o mesmo erro 401.
+POST {{baseUrl}}/api/v1/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "nao-existe@example.com",
+  "password": "{{password}}"
+}
+
+###
+# Leituras REST continuam publicas: esperado 200 sem token.
+GET {{baseUrl}}/api/v1/authors HTTP/1.1
+Accept: application/json
+
+###
+# Criar autor sem token: esperado 401 e nenhum autor criado.
+POST {{baseUrl}}/api/v1/authors HTTP/1.1
+Content-Type: application/json
+
+{
+  "author": {
+    "first_name": "Teste 45",
+    "last_name": "Sem Token",
+    "date_of_birth": "1990-01-31"
+  }
+}
+
+###
+# Atualizar sem token (PUT): esperado 401.
+PUT {{baseUrl}}/api/v1/authors/999999 HTTP/1.1
+Content-Type: application/json
+
+{
+  "author": {
+    "first_name": "Sem Token"
+  }
+}
+
+###
+# Atualizar sem token (PATCH): esperado 401.
+PATCH {{baseUrl}}/api/v1/authors/999999 HTTP/1.1
+Content-Type: application/json
+
+{
+  "author": {
+    "first_name": "Sem Token"
+  }
+}
+
+###
+# Excluir sem token: esperado 401.
+DELETE {{baseUrl}}/api/v1/authors/999999 HTTP/1.1
+Content-Type: application/json
+
+###
+# Token ausente ou invalido: esperado 401.
+POST {{baseUrl}}/api/v1/authors HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer token-invalido
+
+{
+  "author": {
+    "first_name": "Teste",
+    "last_name": "Token Invalido",
+    "date_of_birth": "1990-01-31"
+  }
+}
+
+###
+# Criar autor autenticado: esperado 201.
+# @name createAuthorRest
+POST {{baseUrl}}/api/v1/authors HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "author": {
+    "first_name": "Teste",
+    "last_name": "Autenticado",
+    "date_of_birth": "1990-01-31"
+  }
+}
+
+###
+# Atualizar o autor criado acima com token: esperado 200.
+PUT {{baseUrl}}/api/v1/authors/{{authorId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "author": {
+    "first_name": "Autor Atualizado",
+    "last_name": "Autenticado",
+    "date_of_birth": "1990-01-31"
+  }
+}
+
+###
+# Excluir o autor criado acima com token: esperado 204.
+DELETE {{baseUrl}}/api/v1/authors/{{authorId}} HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
+###
+# Query GraphQL continua publica: esperado 200 sem errors.
+POST {{baseUrl}}/graphql HTTP/1.1
+Content-Type: application/json
+
+{
+  "query": "{ authors { id firstName lastName } }"
+}
+
+###
+# Mutation GraphQL sem token: esperado erro de autenticacao e nenhum autor criado.
+POST {{baseUrl}}/graphql HTTP/1.1
+Content-Type: application/json
+
+{
+  "query": "mutation { createAuthor(firstName: \"Nao\", lastName: \"Autorizado\", dateOfBirth: \"1990-01-31\") { author { id } errors } }"
+}
+
+###
+# Mutation GraphQL autenticada: esperado autor criado sem errors.
+POST {{baseUrl}}/graphql HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "query": "mutation { createAuthor(firstName: \"GraphQL\", lastName: \"Autenticado\", dateOfBirth: \"1990-01-31\") { author { id } errors } }"
+}
+
+###
+# Refresh de origem diferente: esperado 403 e cookie nao rotacionado.
+POST {{baseUrl}}/api/v1/auth/refresh HTTP/1.1
+Content-Type: application/json
+Origin: https://origem-nao-autorizada.example
+
+###
+# Refresh sem Origin: esperado 403.
+POST {{baseUrl}}/api/v1/auth/refresh HTTP/1.1
+Content-Type: application/json
+
+###
+# Refresh valido: esperado 200, novo access_token e rotacao do refresh cookie.
+# O cookie atualizado sera reutilizado pelo REST Client nos requests seguintes.
+# @name refresh
+POST {{baseUrl}}/api/v1/auth/refresh HTTP/1.1
+Content-Type: application/json
+Origin: {{origin}}
+
+###
+# Logout de origem diferente: esperado 403 e sessao nao revogada.
+POST {{baseUrl}}/api/v1/auth/logout HTTP/1.1
+Content-Type: application/json
+Origin: https://origem-nao-autorizada.example
+
+###
+# Logout: esperado 204, revoga a sessao e limpa o refresh cookie.
+POST {{baseUrl}}/api/v1/auth/logout HTTP/1.1
+Content-Type: application/json
+Origin: {{origin}}
+
+###
+# Logout sem cookie: esperado 204.
+POST {{baseUrl}}/api/v1/auth/logout HTTP/1.1
+Content-Type: application/json
+Origin: {{origin}}
+
+###
+# Refresh depois do logout: esperado 401, sem emitir access token.
+POST {{baseUrl}}/api/v1/auth/refresh HTTP/1.1
+Content-Type: application/json
+Origin: {{origin}}
+
+###
+# Refresh com cookie invalido: esperado 401 e cookie limpo.
+POST {{baseUrl}}/api/v1/auth/refresh HTTP/1.1
+Content-Type: application/json
+Origin: {{origin}}
+Cookie: refresh_token=token-invalido

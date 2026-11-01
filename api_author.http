@@ -12,8 +12,9 @@ content-type: application/json
 ###
 POST http://localhost:3000/api/v1/authors HTTP/1.1
 content-type: application/json
+Authorization: Bearer COLE_O_ACCESS_TOKEN_AQUI
 
-{ 
+{
     "author": {
         "first_name": "Pedro",
         "last_name": "Mesquita",
