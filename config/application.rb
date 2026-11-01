@@ -37,6 +37,8 @@ module GraphqlTest
     config.active_job.queue_adapter = :sidekiq
     config.assets.initialize_on_precompile = true
 
+    config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=31536000, immutable' }
+
     # Using Session Middlewares
 
     # This also configures session_options for use below

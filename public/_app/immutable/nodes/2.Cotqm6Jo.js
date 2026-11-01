@@ -1,0 +1,1 @@
+import{H as e,V as t,p as n}from"../chunks/Tl2tU8kL.js";import{t as r}from"../chunks/DNKfmzxg.js";function i(i,a){e(a,!0),n(()=>r(`/books`,{replaceState:!0})),t()}export{i as component};

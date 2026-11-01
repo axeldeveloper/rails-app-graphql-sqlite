@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   post '/graphql', to: 'graphql#execute'
 
-  root 'welcome#index'
+  # root 'welcome#index'
 
   # match 'path', :to => 'controller#action', :via => [:get, :post]
 
@@ -37,6 +37,10 @@ Rails.application.routes.draw do
       resources :authors # , only: [:index, :create]
     end
   end
+
+  get '*path', to: 'welcome#index', constraints: lambda { |req|
+    req.format.html? && !req.path.start_with?('/api', '/graphql', '/rails', '/cable')
+  }
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
